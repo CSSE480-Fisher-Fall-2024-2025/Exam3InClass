@@ -1,48 +1,48 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:moviequotes/models/firestore_model_utils.dart';
+import 'package:groupchat2024/models/firestore_model_utils.dart';
 
-const kMovieQuotesCollectionPath = "MovieQuotes";
-const kMovieQuoteAuthorUid = "authorUid";
-const kMovieQuoteQuote = "quote";
-const kMovieQuoteMovie = "movie";
-const kMovieQuoteLastTouched = "lastTouched";
+const kGroupsCollectionPath = "Groups";
+const kGroupCreated = "created";
+const kGroupMemberEmails = "memberEmails";
+const kGroupName = "name";
+const kGroupOwnerEmail = "ownerEmail";
 
-class MovieQuote {
+class Group {
   String? documentId;
-  String authorUid;
-  String quote;
-  String movie;
-  Timestamp lastTouched;
+  Timestamp created;
+  List<String> memberEmails;
+  String name;
+  String ownerEmail;
 
-  MovieQuote({
+  Group({
     this.documentId,
-    required this.authorUid,
-    required this.quote,
-    required this.movie,
-    required this.lastTouched,
+    required this.created,
+    required this.memberEmails,
+    required this.name,
+    required this.ownerEmail,
   });
 
   // Need for listening.
-  MovieQuote.from(DocumentSnapshot doc)
+  Group.from(DocumentSnapshot doc)
       : this(
           documentId: doc.id,
-          authorUid:
-              FirestoreModelUtils.getStringField(doc, kMovieQuoteAuthorUid),
-          quote: FirestoreModelUtils.getStringField(doc, kMovieQuoteQuote),
-          movie: FirestoreModelUtils.getStringField(doc, kMovieQuoteMovie),
-          lastTouched: FirestoreModelUtils.getTimestampField(
-              doc, kMovieQuoteLastTouched),
+          created: FirestoreModelUtils.getTimestampField(doc, kGroupCreated),
+          memberEmails:
+              FirestoreModelUtils.getStringListField(doc, kGroupMemberEmails),
+          name: FirestoreModelUtils.getStringField(doc, kGroupName),
+          ownerEmail: FirestoreModelUtils.getStringField(doc, kGroupOwnerEmail),
         );
 
+  // Only need when using Firebase UI Firestore
   Map<String, Object?> toJsonMap() => {
-        kMovieQuoteAuthorUid: authorUid,
-        kMovieQuoteQuote: quote,
-        kMovieQuoteMovie: movie,
-        kMovieQuoteLastTouched: lastTouched,
+        kGroupCreated: created,
+        kGroupMemberEmails: memberEmails,
+        kGroupName: name,
+        kGroupOwnerEmail: ownerEmail,
       };
 
   @override
   String toString() {
-    return "Quote: $quote  from Movie: $movie";
+    return "Name: $name  members emails: $memberEmails";
   }
 }

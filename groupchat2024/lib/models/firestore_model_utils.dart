@@ -19,6 +19,13 @@ class FirestoreModelUtils {
           ? documentSnapshot.get(fieldName)
           : "";
 
+  static List<String> getStringListField(
+          DocumentSnapshot documentSnapshot, String fieldName) =>
+      containsField(documentSnapshot, fieldName) &&
+              documentSnapshot.get(fieldName) is List<String>
+          ? documentSnapshot.get(fieldName)
+          : [];
+
   static int getIntField(DocumentSnapshot documentSnapshot, String fieldName) =>
       containsField(documentSnapshot, fieldName) &&
               documentSnapshot.get(fieldName) is int
@@ -35,7 +42,7 @@ class FirestoreModelUtils {
   static DateTime getDateTimeField(
           DocumentSnapshot documentSnapshot, String fieldName) =>
       containsField(documentSnapshot, fieldName) &&
-              documentSnapshot.get(fieldName) is DateTime
+              documentSnapshot.get(fieldName) is Timestamp
           ? documentSnapshot.get(fieldName)?.toDate()
           : DateTime.now();
 

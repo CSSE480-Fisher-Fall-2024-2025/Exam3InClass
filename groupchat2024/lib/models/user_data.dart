@@ -1,10 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:moviequotes/models/firestore_model_utils.dart';
+import 'package:groupchat2024/models/firestore_model_utils.dart';
 
 const kUserDatasCollectionPath = "UserDatas";
 const kUserDataCreated = "created";
-const kUserDataDisplayName = "displayName";
-const kUserDataImageUrl = "imageUrl";
+const kUserDataFirstName = "firstName";
+const kUserDataLastName = "lastName";
 
 class UserData {
   String? documentId;

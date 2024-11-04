@@ -1,6 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
-void main() {
+// Reminders of commands I ran:
+//  for pubspec.yaml I just copied over lines
+//  dart pub global activate flutterfire_cli
+//  flutterfire configure
+//  flutter build web
+//  firebase init
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   runApp(const MyApp());
 }
 
