@@ -9,28 +9,29 @@ const kUserDataLastName = "lastName";
 class UserData {
   String? documentId;
   Timestamp created;
-  String displayName;
-  String imageUrl;
+  String firstName;
+  String lastName;
 
   UserData({
     this.documentId,
     required this.created,
-    required this.displayName,
-    required this.imageUrl,
+    required this.firstName,
+    required this.lastName,
   });
 
-  // Need for listening.
   UserData.from(DocumentSnapshot doc)
       : this(
           documentId: doc.id,
           created: FirestoreModelUtils.getTimestampField(doc, kUserDataCreated),
-          displayName:
-              FirestoreModelUtils.getStringField(doc, kUserDataDisplayName),
-          imageUrl: FirestoreModelUtils.getStringField(doc, kUserDataImageUrl),
+          firstName:
+              FirestoreModelUtils.getStringField(doc, kUserDataFirstName),
+          lastName: FirestoreModelUtils.getStringField(doc, kUserDataLastName),
         );
+
+  String get name => "$firstName $lastName".trim();
 
   @override
   String toString() {
-    return "Display Name: $displayName";
+    return "Name: $name";
   }
 }

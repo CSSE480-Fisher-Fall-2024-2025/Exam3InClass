@@ -1,48 +1,41 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:moviequotes/models/firestore_model_utils.dart';
+import 'package:groupchat2024/models/firestore_model_utils.dart';
 
-const kMovieQuotesCollectionPath = "MovieQuotes";
-const kMovieQuoteAuthorUid = "authorUid";
-const kMovieQuoteQuote = "quote";
-const kMovieQuoteMovie = "movie";
-const kMovieQuoteLastTouched = "lastTouched";
+const kMessagesCollectionPath = "Messages";
+const kMessageAuthorEmail = "authorEmail";
+const kMessageCreated = "created";
+const kMessageText = "text";
 
-class MovieQuote {
+class Message {
   String? documentId;
-  String authorUid;
-  String quote;
-  String movie;
-  Timestamp lastTouched;
+  String authorEmail;
+  Timestamp created;
+  String text;
 
-  MovieQuote({
+  Message({
     this.documentId,
-    required this.authorUid,
-    required this.quote,
-    required this.movie,
-    required this.lastTouched,
+    required this.authorEmail,
+    required this.created,
+    required this.text,
   });
 
-  // Need for listening.
-  MovieQuote.from(DocumentSnapshot doc)
+  Message.from(DocumentSnapshot doc)
       : this(
           documentId: doc.id,
-          authorUid:
-              FirestoreModelUtils.getStringField(doc, kMovieQuoteAuthorUid),
-          quote: FirestoreModelUtils.getStringField(doc, kMovieQuoteQuote),
-          movie: FirestoreModelUtils.getStringField(doc, kMovieQuoteMovie),
-          lastTouched: FirestoreModelUtils.getTimestampField(
-              doc, kMovieQuoteLastTouched),
+          authorEmail:
+              FirestoreModelUtils.getStringField(doc, kMessageAuthorEmail),
+          created: FirestoreModelUtils.getTimestampField(doc, kMessageCreated),
+          text: FirestoreModelUtils.getStringField(doc, kMessageText),
         );
 
   Map<String, Object?> toJsonMap() => {
-        kMovieQuoteAuthorUid: authorUid,
-        kMovieQuoteQuote: quote,
-        kMovieQuoteMovie: movie,
-        kMovieQuoteLastTouched: lastTouched,
+        kMessageAuthorEmail: authorEmail,
+        kMessageCreated: created,
+        kMessageText: text,
       };
 
   @override
   String toString() {
-    return "Quote: $quote  from Movie: $movie";
+    return "Text: $text  from: $authorEmail";
   }
 }

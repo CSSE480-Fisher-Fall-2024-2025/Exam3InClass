@@ -21,9 +21,8 @@ class FirestoreModelUtils {
 
   static List<String> getStringListField(
           DocumentSnapshot documentSnapshot, String fieldName) =>
-      containsField(documentSnapshot, fieldName) &&
-              documentSnapshot.get(fieldName) is List<String>
-          ? documentSnapshot.get(fieldName)
+      containsField(documentSnapshot, fieldName)
+          ? List.castFrom(documentSnapshot.get(fieldName))
           : [];
 
   static int getIntField(DocumentSnapshot documentSnapshot, String fieldName) =>
