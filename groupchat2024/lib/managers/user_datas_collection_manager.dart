@@ -1,60 +1,45 @@
 import 'dart:async';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:moviequotes/managers/auth_manager.dart';
-import 'package:moviequotes/models/movie_quote.dart';
+import 'package:groupchat2024/models/user_data.dart';
 
-class MovieQuotesCollectionManager {
-  // Not needed if using Firebase UI Firestore
-  // var latestMovieQuotes = <MovieQuote>[];
+class UserDatasCollectionManager {
+  var latestUserDatas = <String, UserData>{};
   final CollectionReference _ref;
+  StreamSubscription? _userDatasStreamSubscription;
 
-  static final MovieQuotesCollectionManager instance =
-      MovieQuotesCollectionManager._privateConstructor();
+  static final UserDatasCollectionManager instance =
+      UserDatasCollectionManager._privateConstructor();
 
-  MovieQuotesCollectionManager._privateConstructor()
-      : _ref =
-            FirebaseFirestore.instance.collection(kMovieQuotesCollectionPath);
+  UserDatasCollectionManager._privateConstructor()
+      : _ref = FirebaseFirestore.instance.collection(kUserDatasCollectionPath);
 
-// Not needed if using Firebase UI Firestore
-  // StreamSubscription startListening(Function observer) => _ref
-  //         .orderBy(kMovieQuoteLastTouched, descending: true)
-  //         .snapshots()
-  //         .listen((QuerySnapshot querySnapshot) {
-  //       latestMovieQuotes =
-  //           querySnapshot.docs.map((doc) => MovieQuote.from(doc)).toList();
-  //       observer();
-  //     }, onError: (error) {
-  //       print("Error listening for Movie Quotes $error");
-  //     });
-
-  // void stopListening(StreamSubscription? subscription) {
-  //   subscription?.cancel();
-  // }
-
-  Future<void> add({
-    required String quote,
-    required String movie,
-  }) {
-    return _ref.add({
-      kMovieQuoteAuthorUid: AuthManager.instance.uid,
-      kMovieQuoteQuote: quote,
-      kMovieQuoteMovie: movie,
-      kMovieQuoteLastTouched: Timestamp.now(),
-    }).then((DocumentReference docRef) {
-      print("The add is finished, the doc id was ${docRef.id}");
-    }).catchError((error) {
-      print("There was an error: $error");
+  void startListening() {
+    if (_userDatasStreamSubscription != null) {
+      return; // Already listening
+    }
+    _userDatasStreamSubscription =
+        _ref.snapshots().listen((QuerySnapshot querySnapshot) {
+      latestUserDatas = {};
+      for (DocumentSnapshot doc in querySnapshot.docs) {
+        UserData ud = UserData.from(doc);
+        latestUserDatas[ud.documentId!] = ud;
+      }
+    }, onError: (error) {
+      print("Error listening for Movie Quotes $error");
     });
   }
 
-  Query<MovieQuote> get allMovieQuotesQuery =>
-      _ref.orderBy(kMovieQuoteLastTouched, descending: true).withConverter(
-            fromFirestore: (documentSnapshot, _) =>
-                MovieQuote.from(documentSnapshot),
-            toFirestore: (movieQuote, _) => movieQuote.toJsonMap(),
-          );
+  void stopListening() {
+    _userDatasStreamSubscription?.cancel();
+  }
 
-  Query<MovieQuote> get onlyMyMovieQuotesQuery => allMovieQuotesQuery
-      .where(kMovieQuoteAuthorUid, isEqualTo: AuthManager.instance.uid);
+  String getNameFromEmail(String email) {
+    startListening(); // Just in case nobody ever called it to start the ball rolling.
+    UserData? ud = latestUserDatas[email];
+    if (ud != null && ud.name.isNotEmpty) {
+      return ud.name;
+    }
+    return email;
+  }
 }
