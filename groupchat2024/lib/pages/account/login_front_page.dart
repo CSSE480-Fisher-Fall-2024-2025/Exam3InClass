@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:groupchat2024/components/square_button.dart';
 import 'package:groupchat2024/managers/auth_manager.dart';
 import 'package:groupchat2024/pages/account/register_new_user_page.dart';
+import 'package:groupchat2024/pages/content/groups_list_page.dart';
 
 class LoginFrontPage extends StatefulWidget {
   const LoginFrontPage({super.key});
@@ -22,11 +23,11 @@ class _LoginFrontPageState extends State<LoginFrontPage> {
       if (Navigator.of(context).canPop()) {
         Navigator.of(context).pop();
       }
-      // Navigator.of(context).push(
-      //   MaterialPageRoute(
-      //     builder: (context) => const GroupsListPage(),
-      //   ),
-      // );
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (context) => const GroupsListPage(),
+        ),
+      );
 
       // Navigator.of(context).popUntil((route) => route.isFirst);
     });
