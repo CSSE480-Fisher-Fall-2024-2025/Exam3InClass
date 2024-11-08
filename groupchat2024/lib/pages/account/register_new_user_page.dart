@@ -118,15 +118,16 @@ class _RegisterNewUserPageState extends State<RegisterNewUserPage> {
                 ),
                 SquareButton(
                   displayText: "Create an Account",
-                  onPressCallback: () {
+                  onPressCallback: () async {
                     if (_formKey.currentState!.validate()) {
-                      AuthManager.instance.signInNewUser(
+                      await AuthManager.instance.signInNewUser(
                         context: context,
                         emailAddress: emailTextEditingController.text,
                         password: passwordTextEditingController.text,
                       );
                       UserDataDocumentManager.instance
                           .createUserDataFromCurrentUser(
+                        email: emailTextEditingController.text,
                         firstName: firstNameTextEditingController.text,
                         lastName: lastNameTextEditingController.text,
                       );

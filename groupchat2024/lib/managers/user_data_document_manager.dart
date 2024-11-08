@@ -33,8 +33,9 @@ class UserDataDocumentManager {
   void createUserDataFromCurrentUser({
     required String firstName,
     required String lastName,
+    required String email,
   }) {
-    _ref.doc(AuthManager.instance.email).set({
+    _ref.doc(email).set({
       kUserDataCreated: Timestamp.now(),
       kUserDataFirstName: firstName,
       kUserDataLastName: lastName,

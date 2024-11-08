@@ -59,7 +59,7 @@ class AuthManager {
     _logoutObservers.remove(key);
   }
 
-  void signInNewUser({
+  Future<void> signInNewUser({
     required BuildContext context,
     required String emailAddress,
     required String password,
